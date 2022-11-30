@@ -8,8 +8,52 @@ import (
 )
 
 type MongoDocumentUpdate struct {
-	UpdateOne  func() DataResult
-	UpdateMany func() DataResult
+	UpdateOne        func() DataResult
+	UpdateMany       func() DataResult
+	FindOneAndUpdate func() DataResult
+}
+
+type UpdateOptions struct {
+	ReturnOriginal bool
+	Upsert         bool
+}
+
+type MongoUpdateParams struct {
+	Collection    string
+	Connection    string
+	Database      string
+	DataLog       DataLog
+	Fields        []string
+	Filter        MongoFilter
+	FindParams    MongoFindParams
+	Info          any
+	Input         MongoInputUpdate
+	UpdateOptions UpdateOptions
+}
+
+func (param MongoUpdateParams) _mongoFindOneAndUpdate() DataResult {
+	document := NewMongoDocumentUpdate(param)
+	return document.FindOneAndUpdate()
+}
+
+func FindOneAndUpdate(param UpdateInterface) DataResult {
+	return param._mongoFindOneAndUpdate()
+}
+
+func (param MongoUpdateParams) _mongoUpdateOne() DataResult {
+	document := NewMongoDocumentUpdate(param)
+	return document.UpdateOne()
+}
+func UpdateOne(param UpdateInterface) DataResult {
+	return param._mongoUpdateOne()
+}
+
+func (param MongoUpdateParams) _mongoUpdateMany() DataResult {
+	document := NewMongoDocumentUpdate(param)
+	return document.UpdateMany()
+}
+func UpdateMany(param UpdateInterface) DataResult {
+	return param._mongoUpdateMany()
 }
 
 func NewMongoDocumentUpdate(param MongoUpdateParams) MongoDocumentUpdate {
@@ -31,6 +75,9 @@ func NewMongoDocumentUpdate(param MongoUpdateParams) MongoDocumentUpdate {
 	}
 
 	apiDocumentUpdate := MongoDocumentUpdate{
+		FindOneAndUpdate: func() DataResult {
+			return DataResult{}
+		},
 		UpdateMany: func() DataResult {
 			return DataResult{}
 		},

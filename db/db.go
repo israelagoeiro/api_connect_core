@@ -1,72 +1,64 @@
 package db
 
 import (
+	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
+	"os"
+	"time"
 )
 
-var MongoClient *mongo.Client
+var DbMong *mongo.Client
 
-//DeleteInterface reune comandos de exclusão
-type DeleteInterface interface {
-	deleteOne() DataResult
+type DataLog struct {
+	Action       string
+	SaveChange   bool
+	SaveHistory  bool
+	SaveInfo     bool
+	SaveAnalytic bool
+	Info         InfoModel
 }
 
-//FindInterface reune comandos de consulta
-type FindInterface interface {
-	findOne() DataResult
-	find() DataResult
+func MongoDBOpen() *mongo.Client {
+	client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_DB_CONNECT")))
+
+	if err != nil {
+		fmt.Println("MongoDBOpen--->", err)
+	}
+
+	ctx, _ := context.WithTimeout(context.Background(), 90*time.Second)
+	err = client.Connect(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//ping the database
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected to MongoDB")
+	return client
 }
 
-//InsertInterface reune comandos de inserção
-type InsertInterface interface {
-	insertOne() DataResult
-}
+/*var MongoClient *mongo.Client
 
-//UpdateInterface reune comandos de exclusão
-type UpdateInterface interface {
-	findOneAndUpdate() DataResult
-}
+func MongoDBClose() {
+	if MongoClient == nil {
+		return
+	}
 
-func DeleteOne(param DeleteInterface) DataResult {
-	return param.deleteOne()
-	//return param.DeleteMany()
-}
+	err := MongoClient.Disconnect(context.TODO())
+	if err != nil {
+		log.Fatal(err)
+	}
 
-//Find executa um comando find e retorna um 'DataResult' contendo um único documento da coleção.
-//
-//O parâmetro do 'filter' deve ser um 'MongoFilter' contendo operadores de consulta e pode ser usado para selecionar o
-//documento a ser retornado. Não pode ser nulo. Se o 'filter' não corresponder a nenhum documento, será retornado um
-//'DataResult' com um erro definido como ErrNoDocuments. Se 'filter' corresponder a vários documentos, o primeiro
-//documento da lista um será selecionado do conjunto correspondente e retornado.
-//
-//O parâmetro 'options' deve ser um 'FindOptions' e pode ser usado para especificar opções para esta operação
-//(consulte a documentação options.FindOneOptions).
-//
-//Para obter mais informações sobre o comando, consulte https://www.mongodb.com/docs/manual/reference/command/find/ .
-func Find(param MongoFindParams) DataResult {
-	return param.find()
-}
+	// TODO optional you can log your closed MongoDB client
+	fmt.Println("Connection to MongoDB closed.")
+}*/
 
-//FindOne executa um comando find e retorna um 'DataResult' contendo um único documento da coleção.
-//
-//O parâmetro do 'filter' deve ser um 'MongoFilter' contendo operadores de consulta e pode ser usado para selecionar o
-//documento a ser retornado. Não pode ser nulo. Se o 'filter' não corresponder a nenhum documento, será retornado um
-//'DataResult' com um erro definido como ErrNoDocuments. Se 'filter' corresponder a vários documentos, o primeiro
-//documento da lista um será selecionado do conjunto correspondente e retornado.
-//
-//O parâmetro 'options' deve ser um 'FindOptions' e pode ser usado para especificar opções para esta operação
-//(consulte a documentação options.FindOneOptions).
-//
-//Para obter mais informações sobre o comando, consulte https://www.mongodb.com/docs/manual/reference/command/find/.
-func FindOne(param MongoFindParams) DataResult {
-	return param.findOne()
-}
-
-func UpdateOne(param UpdateInterface) DataResult {
-	return param.findOneAndUpdate()
-}
-
-func InsertOne(param InsertInterface) DataResult {
-	return param.insertOne()
-	//return param.InsertMany()
+func GetCollection(mongoClient *mongo.Client, database string, collectionName string) *mongo.Collection {
+	return mongoClient.Database(database).Collection(collectionName)
 }

@@ -17,8 +17,10 @@ type DataResult struct {
 	_upsertedCount int64 // The number of documents upserted by the operation.
 	_upsertedID    interface{}
 	_id            interface{}
+	_ids           []interface{}
 	_mongoResult   *mongo.Cursor
 	_cancel        context.CancelFunc
+	_count         int64
 }
 
 func (u DataResult) Model(model interface{}) {

@@ -2,8 +2,19 @@ package util
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
+	"log"
 	"reflect"
 )
+
+func LoadEnv() {
+	// load .env file
+	err := godotenv.Load("config.env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+}
 
 func PrintStruct(m any) {
 	v := reflect.ValueOf(m)

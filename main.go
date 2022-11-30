@@ -3,27 +3,26 @@ package main
 import (
 	"github.com/israelagoeiro/api_connect_core/db"
 	"github.com/israelagoeiro/api_connect_core/examples"
-	"github.com/joho/godotenv"
-	"log"
+	"github.com/israelagoeiro/api_connect_core/util"
 )
 
-func loadEnv() {
-	// load .env file
-	err := godotenv.Load("config.env")
-
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-}
-
 func init() {
-	loadEnv()
+	util.LoadEnv()
 }
 
 func main() {
 	db.DbMong = db.MongoDBOpen()
-	//examples.MongoInsert()
+
+	examples.MongoInsertMany()
+	examples.MongoInsertOne()
+
 	examples.MongoFind()
-	//examples.MongoUpdate()
-	examples.MongoDelete()
+	examples.MongoFindOne()
+
+	examples.MongoUpdateMany()
+	examples.MongoUpdateOne()
+
+	examples.MongoDeleteMany()
+	examples.MongoDeleteOne()
+	examples.FindOneAndUpdate()
 }

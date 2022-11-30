@@ -8,6 +8,59 @@ import (
 	"time"
 )
 
+type FindOptions struct {
+	Sort bson.D
+}
+
+type MongoFindParams struct {
+	Collection string
+	Connection string
+	Database   string
+	Filter     MongoFilter
+	Fields     []string
+	Options    FindOptions
+}
+
+//Find executa um comando find e retorna um 'DataResult' contendo um único documento da coleção.
+//
+//O parâmetro do 'filter' deve ser um 'MongoFilter' contendo operadores de consulta e pode ser usado para selecionar o
+//documento a ser retornado. Não pode ser nulo. Se o 'filter' não corresponder a nenhum documento, será retornado um
+//'DataResult' com um erro definido como ErrNoDocuments. Se 'filter' corresponder a vários documentos, o primeiro
+//documento da lista um será selecionado do conjunto correspondente e retornado.
+//
+//O parâmetro 'options' deve ser um 'FindOptions' e pode ser usado para especificar opções para esta operação
+//(consulte a documentação options.FindOneOptions).
+//
+//Para obter mais informações sobre o comando, consulte https://www.mongodb.com/docs/manual/reference/command/find/ .
+func Find(param MongoFindParams) DataResult {
+	return param.find()
+}
+
+func (param MongoFindParams) find() DataResult {
+	document := NewMongoDocumentFind(param)
+	return document.Find()
+}
+
+func (param MongoFindParams) findOne() DataResult {
+	document := NewMongoDocumentFind(param)
+	return document.FindOne()
+}
+
+//FindOne executa um comando find e retorna um 'DataResult' contendo um único documento da coleção.
+//
+//O parâmetro do 'filter' deve ser um 'MongoFilter' contendo operadores de consulta e pode ser usado para selecionar o
+//documento a ser retornado. Não pode ser nulo. Se o 'filter' não corresponder a nenhum documento, será retornado um
+//'DataResult' com um erro definido como ErrNoDocuments. Se 'filter' corresponder a vários documentos, o primeiro
+//documento da lista um será selecionado do conjunto correspondente e retornado.
+//
+//O parâmetro 'options' deve ser um 'FindOptions' e pode ser usado para especificar opções para esta operação
+//(consulte a documentação options.FindOneOptions).
+//
+//Para obter mais informações sobre o comando, consulte https://www.mongodb.com/docs/manual/reference/command/find/.
+func FindOne(param MongoFindParams) DataResult {
+	return param.findOne()
+}
+
 type MongoDocumentFind struct {
 	Find    func() DataResult
 	FindOne func() DataResult
