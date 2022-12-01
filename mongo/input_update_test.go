@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 func TestAddToSet(t *testing.T) {
-	var input = NewMongoInputUpdate()
+	var input = NewUpdateInput()
 	input.AddToSet("qty", 21)
 	input.AddToSet("total", 100)
 	input.AddToSet("casa", "azul")
@@ -24,7 +24,7 @@ func TestAddToSet(t *testing.T) {
 }
 
 func TestAddToSetMap(t *testing.T) {
-	var input = NewMongoInputUpdate()
+	var input = NewUpdateInput()
 	input.AddToSetMap(map[string]any{
 		"qty":   20,
 		"total": 100,
@@ -41,7 +41,7 @@ func TestAddToSetMap(t *testing.T) {
 }
 
 func TestInc(t *testing.T) {
-	var input = NewMongoInputUpdate()
+	var input = NewUpdateInput()
 	input.Inc("total", 100)
 	input.Inc("qty", 20)
 
@@ -56,7 +56,7 @@ func TestInc(t *testing.T) {
 }
 
 func TestIncMap(t *testing.T) {
-	var input = NewMongoInputUpdate()
+	var input = NewUpdateInput()
 	input.IncMap(map[string]any{
 		"qty":   20,
 		"total": 100,
@@ -73,7 +73,7 @@ func TestIncMap(t *testing.T) {
 }
 
 func TestSet(t *testing.T) {
-	var input = NewMongoInputUpdate()
+	var input = NewUpdateInput()
 	input.Set("total", 100)
 	input.Set("qty", 20)
 
@@ -88,7 +88,7 @@ func TestSet(t *testing.T) {
 }
 
 func TestSetMap(t *testing.T) {
-	var input = NewMongoInputUpdate()
+	var input = NewUpdateInput()
 	input.SetMap(map[string]any{
 		"qty":   20,
 		"total": 100,
@@ -105,7 +105,7 @@ func TestSetMap(t *testing.T) {
 }
 
 func TestUpdateIsValid(t *testing.T) {
-	var input = NewMongoInputUpdate()
+	var input = NewUpdateInput()
 	input.AddToSet("qty", 20)
 
 	got := input.IsValid()

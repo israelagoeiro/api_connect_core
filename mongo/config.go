@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"context"
@@ -10,22 +10,13 @@ import (
 	"time"
 )
 
-var DbMong *mongo.Client
+var Client *mongo.Client
 
-type DataLog struct {
-	Action       string
-	SaveChange   bool
-	SaveHistory  bool
-	SaveInfo     bool
-	SaveAnalytic bool
-	Info         InfoModel
-}
-
-func MongoDBOpen() *mongo.Client {
+func NewClient() *mongo.Client {
 	client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_DB_CONNECT")))
 
 	if err != nil {
-		fmt.Println("MongoDBOpen--->", err)
+		fmt.Println("Error NewClient", err)
 	}
 
 	ctx, _ := context.WithTimeout(context.Background(), 90*time.Second)
@@ -39,26 +30,26 @@ func MongoDBOpen() *mongo.Client {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Connected to MongoDB")
+
+	fmt.Println("NewClient: Connected to MongoDB")
+
 	return client
 }
 
-/*var MongoClient *mongo.Client
-
-func MongoDBClose() {
-	if MongoClient == nil {
+func Disconnect() {
+	if Client == nil {
 		return
 	}
 
-	err := MongoClient.Disconnect(context.TODO())
+	err := Client.Disconnect(context.TODO())
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// TODO optional you can log your closed MongoDB client
 	fmt.Println("Connection to MongoDB closed.")
-}*/
+}
 
-func GetCollection(mongoClient *mongo.Client, database string, collectionName string) *mongo.Collection {
-	return mongoClient.Database(database).Collection(collectionName)
+func GetCollection(database string, collectionName string) *mongo.Collection {
+	return Client.Database(database).Collection(collectionName)
 }

@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type MongoDocumentUpdate struct {
+type DocumentUpdate struct {
 	UpdateOne        func() DataResult
 	UpdateMany       func() DataResult
 	FindOneAndUpdate func() DataResult
@@ -18,21 +18,21 @@ type UpdateOptions struct {
 	Upsert         bool
 }
 
-type MongoUpdateParams struct {
+type UpdateParams struct {
 	Collection    string
 	Connection    string
 	Database      string
 	DataLog       DataLog
 	Fields        []string
 	Filter        MongoFilter
-	FindParams    MongoFindParams
+	FindParams    FindParams
 	Info          any
-	Input         MongoInputUpdate
+	Input         UpdateInput
 	UpdateOptions UpdateOptions
 }
 
-func (param MongoUpdateParams) _mongoFindOneAndUpdate() DataResult {
-	document := NewMongoDocumentUpdate(param)
+func (param UpdateParams) _mongoFindOneAndUpdate() DataResult {
+	document := NewDocumentUpdate(param)
 	return document.FindOneAndUpdate()
 }
 
@@ -40,23 +40,23 @@ func FindOneAndUpdate(param UpdateInterface) DataResult {
 	return param._mongoFindOneAndUpdate()
 }
 
-func (param MongoUpdateParams) _mongoUpdateOne() DataResult {
-	document := NewMongoDocumentUpdate(param)
+func (param UpdateParams) _mongoUpdateOne() DataResult {
+	document := NewDocumentUpdate(param)
 	return document.UpdateOne()
 }
 func UpdateOne(param UpdateInterface) DataResult {
 	return param._mongoUpdateOne()
 }
 
-func (param MongoUpdateParams) _mongoUpdateMany() DataResult {
-	document := NewMongoDocumentUpdate(param)
+func (param UpdateParams) _mongoUpdateMany() DataResult {
+	document := NewDocumentUpdate(param)
 	return document.UpdateMany()
 }
 func UpdateMany(param UpdateInterface) DataResult {
 	return param._mongoUpdateMany()
 }
 
-func NewMongoDocumentUpdate(param MongoUpdateParams) MongoDocumentUpdate {
+func NewDocumentUpdate(param UpdateParams) DocumentUpdate {
 	mongoDataLog := NewMongoDataLog(param.DataLog)
 
 	_options := func() *options.FindOneAndUpdateOptions {
@@ -65,7 +65,7 @@ func NewMongoDocumentUpdate(param MongoUpdateParams) MongoDocumentUpdate {
 			returnOriginal = 1
 		}
 
-		apiFields := NewMongoFields(param.Fields)
+		apiFields := NewFields(param.Fields)
 		fmt.Println("apiFields.Values()", apiFields.Values())
 
 		return options.FindOneAndUpdate().
@@ -74,7 +74,7 @@ func NewMongoDocumentUpdate(param MongoUpdateParams) MongoDocumentUpdate {
 			SetReturnDocument(options.ReturnDocument(returnOriginal))
 	}
 
-	apiDocumentUpdate := MongoDocumentUpdate{
+	apiDocumentUpdate := DocumentUpdate{
 		FindOneAndUpdate: func() DataResult {
 			return DataResult{}
 		},
@@ -85,13 +85,13 @@ func NewMongoDocumentUpdate(param MongoUpdateParams) MongoDocumentUpdate {
 			mongoDataLog.PrepareUpdate(param.Input)
 
 			if !param.Input.IsValid() {
-				fmt.Println("UpdateOne::MongoUpdateParams::Input", param.Input.Values())
-				panic("UpdateOne::MongoUpdateParams::Input - Documento de atualização deve ter pelo menos um elemento 'input.Set(?) ou input.AddToSet(?)'")
+				fmt.Println("UpdateOne::UpdateParams::Input", param.Input.Values())
+				panic("UpdateOne::UpdateParams::Input - Documento de atualização deve ter pelo menos um elemento 'input.Set(?) ou input.AddToSet(?)'")
 			}
 
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
-			collection := GetCollection(DbMong, param.Database, param.Collection)
+			collection := GetCollection(param.Database, param.Collection)
 
 			if param.FindParams.Collection != "" {
 				data := collection.FindOneAndUpdate(ctx, param.Filter.Values(), param.Input.Values(), _options())
@@ -100,16 +100,16 @@ func NewMongoDocumentUpdate(param MongoUpdateParams) MongoDocumentUpdate {
 					var dataResult any
 					err := data.Decode(&dataResult)
 					if err != nil {
-						fmt.Println("Error UpdateOne::MongoUpdateParams:Debug()")
+						fmt.Println("Error UpdateOne::UpdateParams:Debug()")
 						return
 					}
-					fmt.Println("UpdateOne::MongoUpdateParams:Debug()", "Collection:"+param.Collection, dataResult)
+					fmt.Println("UpdateOne::UpdateParams:Debug()", "Collection:"+param.Collection, dataResult)
 				}
 				result._result = func() interface{} {
 					var dataResult interface{}
 					err := data.Decode(&dataResult)
 					if err != nil {
-						fmt.Println("Error UpdateOne::MongoUpdateParams:Result()")
+						fmt.Println("Error UpdateOne::UpdateParams:Result()")
 						return nil
 					}
 					return dataResult
@@ -117,7 +117,7 @@ func NewMongoDocumentUpdate(param MongoUpdateParams) MongoDocumentUpdate {
 			} else {
 				data, err := collection.UpdateOne(ctx, param.Filter.Values(), param.Input.Values())
 				if err != nil {
-					fmt.Println("Error UpdateOne::MongoUpdateParams:", err.Error())
+					fmt.Println("Error UpdateOne::UpdateParams:", err.Error())
 				} else {
 					result._modifiedCount = data.ModifiedCount
 					result._matchedCount = data.MatchedCount

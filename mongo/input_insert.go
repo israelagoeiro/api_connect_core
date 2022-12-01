@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"reflect"
 )
 
-type MongoInputInsert struct {
+type InsertInput struct {
 	Model   func(values any)
 	Data    func(field string, values any)
 	DataMap func(values map[string]any)
@@ -24,12 +24,12 @@ func toDoc(v interface{}) (doc bson.D, err error) {
 	err = bson.Unmarshal(data, &doc)
 	return
 }
-func NewMongoInputInsert() MongoInputInsert {
+func NewInsertInput() InsertInput {
 	_data := bson.D{}
 	_isValid := false
 	_listData := map[string]any{}
 
-	return MongoInputInsert{
+	return InsertInput{
 		Model: func(value interface{}) {
 			_data, _ = toDoc(value)
 			_isValid = true
@@ -61,8 +61,8 @@ func NewMongoInputInsert() MongoInputInsert {
 			if len(_listData) > 0 {
 				for k, v := range _listData {
 					if util.ContainsStr(keys, k) {
-						fmt.Println("MongoInsertParams::Input", result, "Error:", "{", k, ":", v, "}")
-						panic("Error MongoInsertParams: Foi encontrado uma duplicidade de parâmetros em '" + k + "'.")
+						fmt.Println("InsertParams::Input", result, "Error:", "{", k, ":", v, "}")
+						panic("Error InsertParams: Foi encontrado uma duplicidade de parâmetros em '" + k + "'.")
 					}
 					result = append(result, bson.E{Key: k, Value: v})
 				}

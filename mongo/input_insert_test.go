@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 func TestData(t *testing.T) {
-	var input = NewMongoInputInsert()
+	var input = NewInsertInput()
 	input.Data("qty", 20)
 
 	got := input.Values()
@@ -22,7 +22,7 @@ func TestData(t *testing.T) {
 }
 
 func TestInsertDataMap(t *testing.T) {
-	var input = NewMongoInputInsert()
+	var input = NewInsertInput()
 	input.DataMap(map[string]any{
 		"qty":   20,
 		"total": 100,
@@ -40,7 +40,7 @@ func TestInsertDataMap(t *testing.T) {
 }
 
 func TestInsertIsValid(t *testing.T) {
-	var input = NewMongoInputInsert()
+	var input = NewInsertInput()
 	input.Data("qty", 20)
 	got := input.IsValid()
 	fmt.Println("got", got)

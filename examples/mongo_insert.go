@@ -2,7 +2,7 @@ package examples
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/db"
+	"github.com/israelagoeiro/api_connect_core/mongo"
 	"time"
 )
 
@@ -20,7 +20,7 @@ func MongoInsertOne() {
 		},
 	}
 
-	input := db.NewMongoInputInsert()
+	input := mongo.NewInsertInput()
 	input.Model(dataModel)
 	input.Data("nserlum", 123456)
 	input.DataMap(map[string]any{
@@ -34,27 +34,27 @@ func MongoInsertOne() {
 		"list": []any{"A", "B", "C", 1, 2, 3},
 	})
 
-	findParams := db.MongoFindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "bolax", "bola.azul"},
 	}
 
-	insertParams := db.MongoInsertParams{
+	insertParams := mongo.InsertParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Input:      input,
 		FindParams: findParams,
-		DataLog: db.DataLog{
+		DataLog: mongo.DataLog{
 			Action:       "INSERT_NSERLUM",
 			SaveHistory:  true,
 			SaveInfo:     false,
 			SaveAnalytic: false,
 		},
 	}
-	dataResult := db.InsertOne(insertParams)
+	dataResult := mongo.InsertOne(insertParams)
 
 	model := FdibModel{}
 	dataResult.Model(&model)
@@ -80,7 +80,7 @@ func MongoInsertMany() {
 		},
 	}
 
-	input := db.NewMongoInputInsert()
+	input := mongo.NewInsertInput()
 	input.Model(dataModel)
 	input.Data("nserlum", 123456)
 	input.DataMap(map[string]any{
@@ -94,27 +94,27 @@ func MongoInsertMany() {
 		"list": []any{"A", "B", "C", 1, 2, 3},
 	})
 
-	findParams := db.MongoFindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "bolax", "bola.azul"},
 	}
 
-	insertParams := db.MongoInsertParams{
+	insertParams := mongo.InsertParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Input:      input,
 		FindParams: findParams,
-		DataLog: db.DataLog{
+		DataLog: mongo.DataLog{
 			Action:       "INSERT_NSERLUM",
 			SaveHistory:  true,
 			SaveInfo:     false,
 			SaveAnalytic: false,
 		},
 	}
-	dataResult := db.InsertMany(insertParams)
+	dataResult := mongo.InsertMany(insertParams)
 
 	model := FdibModel{}
 	dataResult.Model(&model)

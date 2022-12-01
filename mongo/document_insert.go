@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"context"
@@ -8,17 +8,17 @@ import (
 	"time"
 )
 
-type MongoInsertParams struct {
+type InsertParams struct {
 	Collection string
 	Connection string
 	Database   string
 	DataLog    DataLog
-	Input      MongoInputInsert
-	FindParams MongoFindParams
+	Input      InsertInput
+	FindParams FindParams
 }
 
-func (param MongoInsertParams) _mongoInsertOne() DataResult {
-	document := NewMongoDocumentInsert(param)
+func (param InsertParams) _mongoInsertOne() DataResult {
+	document := NewDocumentInsert(param)
 	return document.InsertOne()
 }
 
@@ -26,8 +26,8 @@ func InsertOne(param InsertInterface) DataResult {
 	return param._mongoInsertOne()
 }
 
-func (param MongoInsertParams) _mongoInsertMany() DataResult {
-	document := NewMongoDocumentInsert(param)
+func (param InsertParams) _mongoInsertMany() DataResult {
+	document := NewDocumentInsert(param)
 	return document.InsertOne()
 }
 
@@ -35,28 +35,28 @@ func InsertMany(param InsertInterface) DataResult {
 	return param._mongoInsertMany()
 }
 
-type MongoDocumentInsert struct {
+type DocumentInsert struct {
 	InsertMany func() DataResult
 	InsertOne  func() DataResult
 }
 
-func NewMongoDocumentInsert(param MongoInsertParams) MongoDocumentInsert {
-	//apiFields := NewMongoFields(param)
+func NewDocumentInsert(param InsertParams) DocumentInsert {
+	//apiFields := NewFields(param)
 	mongoDataLog := NewMongoDataLog(param.DataLog)
 
-	apiDocumentUpdate := MongoDocumentInsert{
+	apiDocumentUpdate := DocumentInsert{
 		InsertMany: func() DataResult {
 			mongoDataLog.PrepareInsert(param.Input)
 
 			if !param.Input.IsValid() {
-				fmt.Println("InsertOne::MongoInsertParams::Input", param.Input.Values())
-				panic("InsertOne::MongoInsertParams::Input - Documento de inserção deve ter pelo menos um elemento 'input.Data(?) ou input.Map(?)'")
+				fmt.Println("InsertOne::InsertParams::Input", param.Input.Values())
+				panic("InsertOne::InsertParams::Input - Documento de inserção deve ter pelo menos um elemento 'input.Data(?) ou input.Map(?)'")
 			}
 
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
 
-			collection := GetCollection(DbMong, param.Database, param.Collection)
+			collection := GetCollection(param.Database, param.Collection)
 			//param.Input.Values()
 			docs := []interface{}{
 				bson.D{{"type", "English Breakfast"}, {"rating", 6}},
@@ -65,7 +65,7 @@ func NewMongoDocumentInsert(param MongoInsertParams) MongoDocumentInsert {
 			data, err := collection.InsertMany(ctx, docs)
 
 			if err != nil {
-				fmt.Println("Error MongoDocumentInsert:InsertOne:", err.Error())
+				fmt.Println("Error DocumentInsert:InsertOne:", err.Error())
 			}
 
 			return DataResult{
@@ -76,21 +76,21 @@ func NewMongoDocumentInsert(param MongoInsertParams) MongoDocumentInsert {
 			mongoDataLog.PrepareInsert(param.Input)
 
 			if !param.Input.IsValid() {
-				fmt.Println("InsertOne::MongoInsertParams::Input", param.Input.Values())
-				panic("InsertOne::MongoInsertParams::Input - Documento de inserção deve ter pelo menos um elemento 'input.Data(?) ou input.Map(?)'")
+				fmt.Println("InsertOne::InsertParams::Input", param.Input.Values())
+				panic("InsertOne::InsertParams::Input - Documento de inserção deve ter pelo menos um elemento 'input.Data(?) ou input.Map(?)'")
 			}
 
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
 
-			collection := GetCollection(DbMong, param.Database, param.Collection)
+			collection := GetCollection(param.Database, param.Collection)
 			data, err := collection.InsertOne(ctx, param.Input.Values())
 
 			if err != nil {
-				fmt.Println("Error MongoDocumentInsert:InsertOne:", err.Error())
+				fmt.Println("Error DocumentInsert:InsertOne:", err.Error())
 			} else {
 				result._id = data.InsertedID
-				filter := NewMongoFilter()
+				filter := NewFilter()
 				objectId := data.InsertedID.(primitive.ObjectID)
 				filter.ObjectId(objectId)
 				param.FindParams.Filter = filter

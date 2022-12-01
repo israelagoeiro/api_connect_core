@@ -1,14 +1,14 @@
-package db
+package mongo
 
 import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-type MongoFields struct {
+type Fields struct {
 	Values func() bson.D
 }
 
-func NewMongoFields(listFields []string) MongoFields {
+func NewFields(listFields []string) Fields {
 
 	_projection := func() bson.D {
 		fields := bson.D{{"_id", 1}}
@@ -24,7 +24,7 @@ func NewMongoFields(listFields []string) MongoFields {
 		fmt.Println("Not Implemented Info")
 	}*/
 
-	return MongoFields{
+	return Fields{
 		Values: func() bson.D {
 			return _projection()
 		},

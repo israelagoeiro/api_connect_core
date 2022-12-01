@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"context"
@@ -6,12 +6,12 @@ import (
 	"time"
 )
 
-type MongoDeleteParams struct {
+type DeleteParams struct {
 	Collection string
 	Connection string
 	Database   string
 	DataLog    DataLog
-	FindParams MongoFindParams
+	FindParams FindParams
 	Filter     MongoFilter
 }
 
@@ -22,27 +22,27 @@ func DeleteMany(param DeleteInterface) DataResult {
 	return param.deleteMany()
 }
 
-func (param MongoDeleteParams) deleteMany() DataResult {
-	document := NewMongoDocumentDelete(param)
+func (param DeleteParams) deleteMany() DataResult {
+	document := NewDocumentDelete(param)
 	return document.DeleteMany()
 }
 
-func (param MongoDeleteParams) deleteOne() DataResult {
-	document := NewMongoDocumentDelete(param)
+func (param DeleteParams) deleteOne() DataResult {
+	document := NewDocumentDelete(param)
 	return document.DeleteOne()
 }
 
-type MongoDocumentDelete struct {
+type DocumentDelete struct {
 	DeleteMany func() DataResult
 	DeleteOne  func() DataResult
 }
 
-func NewMongoDocumentDelete(param MongoDeleteParams) MongoDocumentDelete {
-	apiDocumentDelete := MongoDocumentDelete{
+func NewDocumentDelete(param DeleteParams) DocumentDelete {
+	apiDocumentDelete := DocumentDelete{
 		DeleteMany: func() DataResult {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
-			collection := GetCollection(DbMong, param.Database, param.Collection)
+			collection := GetCollection(param.Database, param.Collection)
 			filter := bson.D{}
 			if param.Filter.Values != nil {
 				filter = param.Filter.Values()
@@ -58,7 +58,7 @@ func NewMongoDocumentDelete(param MongoDeleteParams) MongoDocumentDelete {
 		DeleteOne: func() DataResult {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
-			collection := GetCollection(DbMong, param.Database, param.Collection)
+			collection := GetCollection(param.Database, param.Collection)
 			filter := bson.D{}
 			if param.Filter.Values != nil {
 				filter = param.Filter.Values()

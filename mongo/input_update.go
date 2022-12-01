@@ -1,10 +1,10 @@
-package db
+package mongo
 
 import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-type MongoInputUpdate struct {
+type UpdateInput struct {
 	AddToSet    func(field string, value any)
 	AddToSetMap func(values map[string]any)
 	Inc         func(field string, value any)
@@ -15,13 +15,13 @@ type MongoInputUpdate struct {
 	Values      func() bson.D
 }
 
-func NewMongoInputUpdate() MongoInputUpdate {
+func NewUpdateInput() UpdateInput {
 	_isValid := false
 	_listInc := map[string]any{}
 	_listSet := map[string]any{}
 	_listAddToSet := map[string]any{}
 
-	return MongoInputUpdate{
+	return UpdateInput{
 		AddToSet: func(field string, value any) {
 			_listAddToSet[field] = value
 			_isValid = true

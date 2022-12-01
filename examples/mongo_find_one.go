@@ -2,14 +2,14 @@ package examples
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/db"
+	"github.com/israelagoeiro/api_connect_core/mongo"
 	"time"
 )
 
 func MongoFindOne() {
 	start := time.Now()
 
-	filter := db.NewMongoFilter()
+	filter := mongo.NewFilter()
 	//filter.Id("6384f0e452ed0e02aa02d688")
 	//filter.Add("nserlum", db.Eq(654321))
 	//filter.Add("status", db.Eq(true))
@@ -20,19 +20,19 @@ func MongoFindOne() {
 	//filter.Add("nserlum", db.Ne(123456))
 	//filter.Add("nserlum", db.In([]any{654321}))
 	//filter.Add("nserlum", db.Nin([]any{654321}))
-	filter.Add("nserlum", db.Exists(true))
+	filter.Add("nserlum", mongo.Exists(true))
 	///???filter.Add("gato", db.Type("amarelo"))
 	//filter.Add("gato", db.Regex("v.rd+"))
 
-	findParams := db.MongoFindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Filter:     filter,
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options:    db.FindOptions{},
+		Options:    mongo.FindOptions{},
 	}
-	dataResult := db.FindOne(findParams)
+	dataResult := mongo.FindOne(findParams)
 
 	model := FdibModel{}
 	dataResult.Model(&model)

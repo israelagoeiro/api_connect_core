@@ -2,31 +2,31 @@ package examples
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/db"
+	"github.com/israelagoeiro/api_connect_core/mongo"
 	"time"
 )
 
 func MongoUpdateOne() {
 	start := time.Now()
 
-	filter := db.NewMongoFilter()
+	filter := mongo.NewFilter()
 	filter.Id("6384f0e452ed0e02aa02d688")
 
-	input := db.NewMongoInputUpdate()
+	input := mongo.NewUpdateInput()
 	input.Set("nserlum", 999999)
 	input.SetMap(map[string]any{
 		"bola": "azul",
 		"mala": "verde",
 	})
 
-	findParams := db.MongoFindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo"},
 	}
 
-	updateParams := db.MongoUpdateParams{
+	updateParams := mongo.UpdateParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
@@ -34,11 +34,11 @@ func MongoUpdateOne() {
 		Input:      input,
 		Filter:     filter,
 		FindParams: findParams,
-		UpdateOptions: db.UpdateOptions{
+		UpdateOptions: mongo.UpdateOptions{
 			ReturnOriginal: true,
 			Upsert:         true,
 		},
-		DataLog: db.DataLog{
+		DataLog: mongo.DataLog{
 			Action:       "UPDATE_NSERLUM",
 			SaveChange:   true,
 			SaveHistory:  true,
@@ -46,7 +46,7 @@ func MongoUpdateOne() {
 			SaveAnalytic: false,
 		},
 	}
-	dataResult := db.UpdateOne(updateParams)
+	dataResult := mongo.UpdateOne(updateParams)
 
 	model := FdibModel{}
 	dataResult.Model(&model)
@@ -62,24 +62,24 @@ func MongoUpdateOne() {
 func MongoUpdateMany() {
 	start := time.Now()
 
-	filter := db.NewMongoFilter()
+	filter := mongo.NewFilter()
 	filter.Id("6384f0e452ed0e02aa02d688")
 
-	input := db.NewMongoInputUpdate()
+	input := mongo.NewUpdateInput()
 	input.Set("nserlum", 999999)
 	input.SetMap(map[string]any{
 		"bola": "azul",
 		"mala": "verde",
 	})
 
-	findParams := db.MongoFindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo"},
 	}
 
-	updateParams := db.MongoUpdateParams{
+	updateParams := mongo.UpdateParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
@@ -87,11 +87,11 @@ func MongoUpdateMany() {
 		Input:      input,
 		Filter:     filter,
 		FindParams: findParams,
-		UpdateOptions: db.UpdateOptions{
+		UpdateOptions: mongo.UpdateOptions{
 			ReturnOriginal: true,
 			Upsert:         true,
 		},
-		DataLog: db.DataLog{
+		DataLog: mongo.DataLog{
 			Action:       "UPDATE_NSERLUM",
 			SaveChange:   true,
 			SaveHistory:  true,
@@ -99,7 +99,7 @@ func MongoUpdateMany() {
 			SaveAnalytic: false,
 		},
 	}
-	dataResult := db.UpdateMany(updateParams)
+	dataResult := mongo.UpdateMany(updateParams)
 
 	model := FdibModel{}
 	dataResult.Model(&model)
@@ -115,24 +115,24 @@ func MongoUpdateMany() {
 func FindOneAndUpdate() {
 	start := time.Now()
 
-	filter := db.NewMongoFilter()
+	filter := mongo.NewFilter()
 	filter.Id("6384f0e452ed0e02aa02d688")
 
-	input := db.NewMongoInputUpdate()
+	input := mongo.NewUpdateInput()
 	input.Set("nserlum", 999999)
 	input.SetMap(map[string]any{
 		"bola": "azul",
 		"mala": "verde",
 	})
 
-	findParams := db.MongoFindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo"},
 	}
 
-	updateParams := db.MongoUpdateParams{
+	updateParams := mongo.UpdateParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
@@ -140,11 +140,11 @@ func FindOneAndUpdate() {
 		Input:      input,
 		Filter:     filter,
 		FindParams: findParams,
-		UpdateOptions: db.UpdateOptions{
+		UpdateOptions: mongo.UpdateOptions{
 			ReturnOriginal: true,
 			Upsert:         true,
 		},
-		DataLog: db.DataLog{
+		DataLog: mongo.DataLog{
 			Action:       "UPDATE_NSERLUM",
 			SaveChange:   true,
 			SaveHistory:  true,
@@ -152,7 +152,7 @@ func FindOneAndUpdate() {
 			SaveAnalytic: false,
 		},
 	}
-	dataResult := db.FindOneAndUpdate(updateParams)
+	dataResult := mongo.FindOneAndUpdate(updateParams)
 
 	model := FdibModel{}
 	dataResult.Model(&model)

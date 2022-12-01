@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"context"
@@ -12,7 +12,7 @@ type FindOptions struct {
 	Sort bson.D
 }
 
-type MongoFindParams struct {
+type FindParams struct {
 	Collection string
 	Connection string
 	Database   string
@@ -32,18 +32,12 @@ type MongoFindParams struct {
 //(consulte a documentação options.FindOneOptions).
 //
 //Para obter mais informações sobre o comando, consulte https://www.mongodb.com/docs/manual/reference/command/find/ .
-func Find(param MongoFindParams) DataResult {
+func Find(param FindParams) DataResult {
 	return param.find()
 }
-
-func (param MongoFindParams) find() DataResult {
-	document := NewMongoDocumentFind(param)
+func (param FindParams) find() DataResult {
+	document := NewDocumentFind(param)
 	return document.Find()
-}
-
-func (param MongoFindParams) findOne() DataResult {
-	document := NewMongoDocumentFind(param)
-	return document.FindOne()
 }
 
 //FindOne executa um comando find e retorna um 'DataResult' contendo um único documento da coleção.
@@ -57,23 +51,27 @@ func (param MongoFindParams) findOne() DataResult {
 //(consulte a documentação options.FindOneOptions).
 //
 //Para obter mais informações sobre o comando, consulte https://www.mongodb.com/docs/manual/reference/command/find/.
-func FindOne(param MongoFindParams) DataResult {
+func FindOne(param FindParams) DataResult {
 	return param.findOne()
 }
+func (param FindParams) findOne() DataResult {
+	document := NewDocumentFind(param)
+	return document.FindOne()
+}
 
-type MongoDocumentFind struct {
+type DocumentFind struct {
 	Find    func() DataResult
 	FindOne func() DataResult
 }
 
-func NewMongoDocumentFind(param MongoFindParams) MongoDocumentFind {
-	apiFields := NewMongoFields(param.Fields)
-	apiDocumentUpdate := MongoDocumentFind{
+func NewDocumentFind(param FindParams) DocumentFind {
+	apiFields := NewFields(param.Fields)
+	apiDocumentUpdate := DocumentFind{
 		Find: func() DataResult {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
 
-			collection := GetCollection(DbMong, param.Database, param.Collection)
+			collection := GetCollection(param.Database, param.Collection)
 			opts := options.Find()
 
 			if param.Options.Sort != nil {
@@ -113,7 +111,7 @@ func NewMongoDocumentFind(param MongoFindParams) MongoDocumentFind {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
 
-			collection := GetCollection(DbMong, param.Database, param.Collection)
+			collection := GetCollection(param.Database, param.Collection)
 			opts := options.FindOne()
 
 			if param.Options.Sort != nil {

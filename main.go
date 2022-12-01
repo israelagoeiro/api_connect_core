@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/israelagoeiro/api_connect_core/db"
 	"github.com/israelagoeiro/api_connect_core/examples"
+	"github.com/israelagoeiro/api_connect_core/mongo"
 	"github.com/israelagoeiro/api_connect_core/util"
 )
 
@@ -11,7 +11,7 @@ func init() {
 }
 
 func main() {
-	db.DbMong = db.MongoDBOpen()
+	mongo.Client = mongo.NewClient()
 
 	examples.MongoInsertMany()
 	examples.MongoInsertOne()

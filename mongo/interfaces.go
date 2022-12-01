@@ -1,4 +1,4 @@
-package db
+package mongo
 
 //DeleteInterface reune comandos de exclusão
 type DeleteInterface interface {

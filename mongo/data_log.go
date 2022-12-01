@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"time"
@@ -20,15 +20,24 @@ type InfoModel struct {
 	History   *[]HistoryModel `json:"history,omitempty" bson:"history,omitempty"`
 }
 
+type DataLog struct {
+	Action       string
+	SaveChange   bool
+	SaveHistory  bool
+	SaveInfo     bool
+	SaveAnalytic bool
+	Info         InfoModel
+}
+
 type MongoDataLog struct {
-	PrepareInsert func(input MongoInputInsert)
-	PrepareUpdate func(input MongoInputUpdate)
+	PrepareInsert func(input InsertInput)
+	PrepareUpdate func(input UpdateInput)
 }
 
 func NewMongoDataLog(dataLog DataLog) MongoDataLog {
 	var _info InfoModel
 	return MongoDataLog{
-		PrepareInsert: func(input MongoInputInsert) {
+		PrepareInsert: func(input InsertInput) {
 			//TODO:: Garantir que somente quando houver usuários possa registrar info e history
 			if dataLog.SaveInfo || dataLog.SaveHistory {
 				//TODO:: Implementar no MongoDataLog:SaveInfo Checksum
@@ -58,7 +67,7 @@ func NewMongoDataLog(dataLog DataLog) MongoDataLog {
 				}
 			}
 		},
-		PrepareUpdate: func(input MongoInputUpdate) {
+		PrepareUpdate: func(input UpdateInput) {
 			if dataLog.SaveInfo || dataLog.SaveHistory {
 				//TODO:: Implementar no MongoDataLog:SaveInfo Checksum
 				//TODO:: Implementar no MongoDataLog:SaveInfo UserId

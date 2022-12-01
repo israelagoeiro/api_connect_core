@@ -2,33 +2,33 @@ package examples
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/db"
+	"github.com/israelagoeiro/api_connect_core/mongo"
 	"time"
 )
 
 func MongoDeleteOne() {
 	start := time.Now()
 
-	findParams := db.MongoFindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "bolax", "bola.azul"},
 	}
 
-	deleteParams := db.MongoDeleteParams{
+	deleteParams := mongo.DeleteParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		FindParams: findParams,
-		DataLog: db.DataLog{
+		DataLog: mongo.DataLog{
 			Action:       "INSERT_NSERLUM",
 			SaveHistory:  true,
 			SaveInfo:     false,
 			SaveAnalytic: false,
 		},
 	}
-	dataResult := db.DeleteOne(deleteParams)
+	dataResult := mongo.DeleteOne(deleteParams)
 
 	model := FdibModel{}
 	dataResult.Model(&model)
@@ -43,26 +43,26 @@ func MongoDeleteOne() {
 func MongoDeleteMany() {
 	start := time.Now()
 
-	findParams := db.MongoFindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "bolax", "bola.azul"},
 	}
 
-	deleteParams := db.MongoDeleteParams{
+	deleteParams := mongo.DeleteParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		FindParams: findParams,
-		DataLog: db.DataLog{
+		DataLog: mongo.DataLog{
 			Action:       "INSERT_NSERLUM",
 			SaveHistory:  true,
 			SaveInfo:     false,
 			SaveAnalytic: false,
 		},
 	}
-	dataResult := db.DeleteMany(deleteParams)
+	dataResult := mongo.DeleteMany(deleteParams)
 
 	model := FdibModel{}
 	dataResult.Model(&model)

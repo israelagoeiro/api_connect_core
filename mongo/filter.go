@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"fmt"
@@ -130,7 +130,7 @@ type MongoFilter struct {
 	Debug    func()
 }
 
-func NewMongoFilter() MongoFilter {
+func NewFilter() MongoFilter {
 	result := bson.D{}
 
 	return MongoFilter{

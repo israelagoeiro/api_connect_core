@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 func TestEq(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("gato", Eq("verde"))
 	filter.Add("bola", Eq("azul"))
 
@@ -33,7 +33,7 @@ func TestEqField(t *testing.T) {
 }
 
 func TestGt(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("gato", Gt("verde"))
 	filter.Add("bola", Gt("azul"))
 
@@ -58,7 +58,7 @@ func TestGtField(t *testing.T) {
 }
 
 func TestGte(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("gato", Gte("verde"))
 	filter.Add("bola", Gte("azul"))
 
@@ -83,7 +83,7 @@ func TestGteField(t *testing.T) {
 }
 
 func TestLt(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("gato", Lt("verde"))
 	filter.Add("bola", Lt("azul"))
 
@@ -108,7 +108,7 @@ func TestLtField(t *testing.T) {
 }
 
 func TestLte(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("gato", Lte("verde"))
 	filter.Add("bola", Lte("azul"))
 
@@ -133,7 +133,7 @@ func TestLteField(t *testing.T) {
 }
 
 func TestNe(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("gato", Ne("verde"))
 	filter.Add("bola", Ne("azul"))
 
@@ -158,7 +158,7 @@ func TestNeField(t *testing.T) {
 }
 
 func TestIn(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("qty", In([]any{20, 30, 41}))
 	filter.Add("type", In([]any{"casa", "azul", "verde"}))
 
@@ -183,7 +183,7 @@ func TestInField(t *testing.T) {
 }
 
 func TestNin(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("qty", Nin([]any{20, 30, 41}))
 	filter.Add("type", Nin([]any{"casa", "azul", "verde"}))
 
@@ -208,7 +208,7 @@ func TestNinField(t *testing.T) {
 }
 
 func TestExists(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("gato", Exists(false))
 	filter.Add("bola", Exists(true))
 
@@ -233,7 +233,7 @@ func TestExistsField(t *testing.T) {
 }
 
 func TestType(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("gato", Type("verde"))
 	filter.Add("bola", Type("azul"))
 
@@ -258,7 +258,7 @@ func TestTypeField(t *testing.T) {
 }
 
 func TestDivide(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("qty", Divide([]any{20, 30, 41}))
 	filter.Add("type", Divide([]any{"casa", "azul", "verde"}))
 
@@ -283,7 +283,7 @@ func TestDivideField(t *testing.T) {
 }
 
 func TestExpr(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("qty", Expr([]any{20, 30, 41}))
 	filter.Add("type", Expr([]any{"casa", "azul", "verde"}))
 
@@ -309,7 +309,7 @@ func TestExpr(t *testing.T) {
 }*/
 
 func TestNot(t *testing.T) {
-	var filter = NewMongoFilter()
+	var filter = NewFilter()
 	filter.Add("item", Not("/^p.*/"))
 	filter.Add("bola", Not(Regex("/^p.*/")))
 

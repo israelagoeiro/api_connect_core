@@ -1,16 +1,16 @@
-package examples
+package mongo
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/mongo"
+	"github.com/israelagoeiro/api_connect_core/examples"
 	"time"
 )
 
-func MongoFind() {
+func Example_find() {
 	start := time.Now()
 
-	filter := mongo.NewFilter()
-	filter.Add("quantity", mongo.Gte(20))
+	filter := NewFilter()
+	filter.Add("quantity", Gte(20))
 
 	//db.inventory.find( { quantity: { $gte: 20 } } )
 	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
@@ -29,19 +29,19 @@ func MongoFind() {
 	///???filter.Add("gato", db.Type("amarelo"))
 	//filter.Add("gato", db.Regex("v.rd+"))
 
-	findParams := mongo.FindParams{
+	findParams := FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Filter:     filter,
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: mongo.FindOptions{
-			Sort: mongo.Sort("etiqueta", false),
+		Options: FindOptions{
+			Sort: Sort("etiqueta", false),
 		},
 	}
-	dataResult := mongo.Find(findParams)
+	dataResult := Find(findParams)
 
-	models := []FdibModel{}
+	models := []examples.FdibModel{}
 	dataResult.Print()
 	dataResult.Models(&models)
 
