@@ -6,12 +6,6 @@ type DeleteInterface interface {
 	deleteMany() DataResult
 }
 
-//FindInterface reune comandos de consulta
-type FindInterface interface {
-	findOne() DataResult
-	find() DataResult
-}
-
 //InsertInterface reune comandos de inserção
 type InsertInterface interface {
 	_mongoInsertOne() DataResult
