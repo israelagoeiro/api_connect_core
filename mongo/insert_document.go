@@ -17,24 +17,6 @@ type InsertParams struct {
 	FindParams FindParams
 }
 
-func (param InsertParams) _mongoInsertOne() DataResult {
-	document := NewDocumentInsert(param)
-	return document.InsertOne()
-}
-
-func InsertOne(param InsertInterface) DataResult {
-	return param._mongoInsertOne()
-}
-
-func (param InsertParams) _mongoInsertMany() DataResult {
-	document := NewDocumentInsert(param)
-	return document.InsertOne()
-}
-
-func InsertMany(param InsertInterface) DataResult {
-	return param._mongoInsertMany()
-}
-
 type DocumentInsert struct {
 	InsertMany func() DataResult
 	InsertOne  func() DataResult

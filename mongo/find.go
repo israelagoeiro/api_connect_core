@@ -21,7 +21,7 @@ func Find(param FindParams) DataResult {
 	return param.find()
 }
 func (param FindParams) find() DataResult {
-	document := NewDocumentFind(param)
+	document := NewFindDocument(param)
 	return document.Find()
 }
 
@@ -40,6 +40,6 @@ func FindOne(param FindParams) DataResult {
 	return param.findOne()
 }
 func (param FindParams) findOne() DataResult {
-	document := NewDocumentFind(param)
+	document := NewFindDocument(param)
 	return document.FindOne()
 }

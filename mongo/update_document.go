@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type DocumentUpdate struct {
+type UpdateDocument struct {
 	UpdateOne        func() DataResult
 	UpdateMany       func() DataResult
 	FindOneAndUpdate func() DataResult
@@ -31,32 +31,7 @@ type UpdateParams struct {
 	UpdateOptions UpdateOptions
 }
 
-func (param UpdateParams) _mongoFindOneAndUpdate() DataResult {
-	document := NewDocumentUpdate(param)
-	return document.FindOneAndUpdate()
-}
-
-func FindOneAndUpdate(param UpdateInterface) DataResult {
-	return param._mongoFindOneAndUpdate()
-}
-
-func (param UpdateParams) _mongoUpdateOne() DataResult {
-	document := NewDocumentUpdate(param)
-	return document.UpdateOne()
-}
-func UpdateOne(param UpdateInterface) DataResult {
-	return param._mongoUpdateOne()
-}
-
-func (param UpdateParams) _mongoUpdateMany() DataResult {
-	document := NewDocumentUpdate(param)
-	return document.UpdateMany()
-}
-func UpdateMany(param UpdateInterface) DataResult {
-	return param._mongoUpdateMany()
-}
-
-func NewDocumentUpdate(param UpdateParams) DocumentUpdate {
+func NewUpdateDocument(param UpdateParams) UpdateDocument {
 	mongoDataLog := NewMongoDataLog(param.DataLog)
 
 	_options := func() *options.FindOneAndUpdateOptions {
@@ -74,7 +49,7 @@ func NewDocumentUpdate(param UpdateParams) DocumentUpdate {
 			SetReturnDocument(options.ReturnDocument(returnOriginal))
 	}
 
-	apiDocumentUpdate := DocumentUpdate{
+	apiDocumentUpdate := UpdateDocument{
 		FindOneAndUpdate: func() DataResult {
 			return DataResult{}
 		},

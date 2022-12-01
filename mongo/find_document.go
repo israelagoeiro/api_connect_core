@@ -21,14 +21,14 @@ type FindParams struct {
 	Options    FindOptions
 }
 
-type DocumentFind struct {
+type FindDocument struct {
 	Find    func() DataResult
 	FindOne func() DataResult
 }
 
-func NewDocumentFind(param FindParams) DocumentFind {
+func NewFindDocument(param FindParams) FindDocument {
 	apiFields := NewFields(param.Fields)
-	apiDocumentUpdate := DocumentFind{
+	apiDocumentUpdate := FindDocument{
 		Find: func() DataResult {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()

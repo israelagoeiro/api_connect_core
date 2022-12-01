@@ -15,30 +15,13 @@ type DeleteParams struct {
 	Filter     MongoFilter
 }
 
-func DeleteOne(param DeleteInterface) DataResult {
-	return param.deleteOne()
-}
-func DeleteMany(param DeleteInterface) DataResult {
-	return param.deleteMany()
-}
-
-func (param DeleteParams) deleteMany() DataResult {
-	document := NewDocumentDelete(param)
-	return document.DeleteMany()
-}
-
-func (param DeleteParams) deleteOne() DataResult {
-	document := NewDocumentDelete(param)
-	return document.DeleteOne()
-}
-
-type DocumentDelete struct {
+type DeleteDocument struct {
 	DeleteMany func() DataResult
 	DeleteOne  func() DataResult
 }
 
-func NewDocumentDelete(param DeleteParams) DocumentDelete {
-	apiDocumentDelete := DocumentDelete{
+func NewDeleteDocument(param DeleteParams) DeleteDocument {
+	apiDocumentDelete := DeleteDocument{
 		DeleteMany: func() DataResult {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
