@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func Example_find() {
+func ExampleFind() {
 	start := time.Now()
 
 	filter := NewFilter()
@@ -41,7 +41,7 @@ func Example_find() {
 	}
 	dataResult := Find(findParams)
 
-	models := []examples.FdibModel{}
+	var models []examples.FdibModel
 	dataResult.Print()
 	dataResult.Models(&models)
 
@@ -49,4 +49,8 @@ func Example_find() {
 	fmt.Println("dataResult--->>>", models, time.Since(start))
 	//fmt.Println("dataResult--->>>", model, time.Since(start))
 	//fmt.Println("dataResult--->>>", models[1].Etiqueta, time.Since(start))
+
+	// Output:
+	// 1257894000000
+	// 2009-11-10 23:00:00 +0000 UTC
 }
