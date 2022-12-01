@@ -2,10 +2,19 @@ package mongo
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/test"
 	"go.mongodb.org/mongo-driver/bson"
 	"testing"
 )
+
+func IsValidData(a, b bson.D) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	listA := getMap(a)
+	listB := getMap(b)
+	return compareMap(listA, listB)
+}
 
 func TestData(t *testing.T) {
 	var input = NewInsertInput()
@@ -16,7 +25,7 @@ func TestData(t *testing.T) {
 	fmt.Println("got", got)
 	fmt.Println("want", want)
 
-	if !test.IsValidData(got, want) {
+	if !IsValidData(got, want) {
 		t.Errorf("got %q, wanted %q", got, want)
 	}
 }
@@ -34,7 +43,7 @@ func TestInsertDataMap(t *testing.T) {
 	fmt.Println("got", got)
 	fmt.Println("want", want)
 
-	if !test.IsValidData(got, want) {
+	if !IsValidData(got, want) {
 		t.Errorf("got %q, wanted %q", got, want)
 	}
 }

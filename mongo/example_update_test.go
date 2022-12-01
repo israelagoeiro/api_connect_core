@@ -1,17 +1,16 @@
-package example_test
+package mongo_test
 
 import (
 	"fmt"
 	"github.com/israelagoeiro/api_connect_core/examples"
-	"github.com/israelagoeiro/api_connect_core/mongo"
 	"time"
 )
 
 func ExampleUpdateOne() {
 	start := time.Now()
 
-	filter := mongo.NewFilter()
-	filter.Add("quantity", mongo.Gte(20))
+	filter := NewFilter()
+	filter.Add("quantity", Gte(20))
 
 	//db.inventory.find( { quantity: { $gte: 20 } } )
 	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
@@ -30,17 +29,17 @@ func ExampleUpdateOne() {
 	///???filter.Add("gato", db.Type("amarelo"))
 	//filter.Add("gato", db.Regex("v.rd+"))
 
-	findParams := mongo.FindParams{
+	findParams := FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Filter:     filter,
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: mongo.FindOptions{
-			Sort: mongo.Sort("etiqueta", false),
+		Options: FindOptions{
+			Sort: Sort("etiqueta", false),
 		},
 	}
-	dataResult := mongo.Find(findParams)
+	dataResult := Find(findParams)
 
 	var models []examples.FdibModel
 	dataResult.Print()
@@ -59,8 +58,8 @@ func ExampleUpdateOne() {
 func ExampleUpdateMany() {
 	start := time.Now()
 
-	filter := mongo.NewFilter()
-	filter.Add("quantity", mongo.Gte(20))
+	filter := NewFilter()
+	filter.Add("quantity", Gte(20))
 
 	//db.inventory.find( { quantity: { $gte: 20 } } )
 	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
@@ -79,17 +78,17 @@ func ExampleUpdateMany() {
 	///???filter.Add("gato", db.Type("amarelo"))
 	//filter.Add("gato", db.Regex("v.rd+"))
 
-	findParams := mongo.FindParams{
+	findParams := FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Filter:     filter,
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: mongo.FindOptions{
-			Sort: mongo.Sort("etiqueta", false),
+		Options: FindOptions{
+			Sort: Sort("etiqueta", false),
 		},
 	}
-	dataResult := mongo.Find(findParams)
+	dataResult := Find(findParams)
 
 	var models []examples.FdibModel
 	dataResult.Print()
@@ -108,8 +107,8 @@ func ExampleUpdateMany() {
 func ExampleFindOneAndUpdate() {
 	start := time.Now()
 
-	filter := mongo.NewFilter()
-	filter.Add("quantity", mongo.Gte(20))
+	filter := NewFilter()
+	filter.Add("quantity", Gte(20))
 
 	//db.inventory.find( { quantity: { $gte: 20 } } )
 	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
@@ -128,17 +127,17 @@ func ExampleFindOneAndUpdate() {
 	///???filter.Add("gato", db.Type("amarelo"))
 	//filter.Add("gato", db.Regex("v.rd+"))
 
-	findParams := mongo.FindParams{
+	findParams := FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Filter:     filter,
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: mongo.FindOptions{
-			Sort: mongo.Sort("etiqueta", false),
+		Options: FindOptions{
+			Sort: Sort("etiqueta", false),
 		},
 	}
-	dataResult := mongo.Find(findParams)
+	dataResult := Find(findParams)
 
 	var models []examples.FdibModel
 	dataResult.Print()

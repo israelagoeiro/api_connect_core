@@ -1,4 +1,4 @@
-package example_test
+package mongo_test
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func ExampleDeleteMany() {
+func ExampleFind() {
 	start := time.Now()
 
 	filter := mongo.NewFilter()
@@ -56,7 +56,7 @@ func ExampleDeleteMany() {
 	// 2009-11-10 23:00:00 +0000 UTC
 }
 
-func ExampleDeleteOne() {
+func ExampleFindOne() {
 	start := time.Now()
 
 	filter := mongo.NewFilter()
