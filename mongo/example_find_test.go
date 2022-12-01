@@ -1,16 +1,17 @@
-package mongo
+package mongo_test
 
 import (
 	"fmt"
 	"github.com/israelagoeiro/api_connect_core/examples"
+	"github.com/israelagoeiro/api_connect_core/mongo"
 	"time"
 )
 
 func ExampleFind() {
 	start := time.Now()
 
-	filter := NewFilter()
-	filter.Add("quantity", Gte(20))
+	filter := mongo.NewFilter()
+	filter.Add("quantity", mongo.Gte(20))
 
 	//db.inventory.find( { quantity: { $gte: 20 } } )
 	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
@@ -29,17 +30,17 @@ func ExampleFind() {
 	///???filter.Add("gato", db.Type("amarelo"))
 	//filter.Add("gato", db.Regex("v.rd+"))
 
-	findParams := FindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Filter:     filter,
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: FindOptions{
-			Sort: Sort("etiqueta", false),
+		Options: mongo.FindOptions{
+			Sort: mongo.Sort("etiqueta", false),
 		},
 	}
-	dataResult := Find(findParams)
+	dataResult := mongo.Find(findParams)
 
 	var models []examples.FdibModel
 	dataResult.Print()
@@ -58,8 +59,8 @@ func ExampleFind() {
 func ExampleFindOne() {
 	start := time.Now()
 
-	filter := NewFilter()
-	filter.Add("quantity", Gte(20))
+	filter := mongo.NewFilter()
+	filter.Add("quantity", mongo.Gte(20))
 
 	//db.inventory.find( { quantity: { $gte: 20 } } )
 	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
@@ -78,17 +79,17 @@ func ExampleFindOne() {
 	///???filter.Add("gato", db.Type("amarelo"))
 	//filter.Add("gato", db.Regex("v.rd+"))
 
-	findParams := FindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
 		Filter:     filter,
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: FindOptions{
-			Sort: Sort("etiqueta", false),
+		Options: mongo.FindOptions{
+			Sort: mongo.Sort("etiqueta", false),
 		},
 	}
-	dataResult := Find(findParams)
+	dataResult := mongo.Find(findParams)
 
 	var models []examples.FdibModel
 	dataResult.Print()
