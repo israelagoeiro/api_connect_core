@@ -2,7 +2,6 @@ package mongo_test
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/examples"
 	"github.com/israelagoeiro/api_connect_core/mongo"
 	"time"
 )
@@ -42,7 +41,7 @@ func ExampleFind() {
 	}
 	dataResult := mongo.Find(findParams)
 
-	var models []examples.FdibModel
+	var models []mongo.FdibModel
 	dataResult.Print()
 	dataResult.Models(&models)
 
@@ -60,11 +59,6 @@ func ExampleFindOne() {
 	start := time.Now()
 
 	filter := mongo.NewFilter()
-	filter.Add("quantity", mongo.Gte(20))
-
-	//db.inventory.find( { quantity: { $gte: 20 } } )
-	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
-
 	//filter.Id("6384f0e452ed0e02aa02d688")
 	//filter.Add("nserlum", db.Eq(654321))
 	//filter.Add("status", db.Eq(true))
@@ -75,7 +69,7 @@ func ExampleFindOne() {
 	//filter.Add("nserlum", db.Ne(123456))
 	//filter.Add("nserlum", db.In([]any{654321}))
 	//filter.Add("nserlum", db.Nin([]any{654321}))
-	//filter.Add("nserlum", db.Exists(true))
+	filter.Add("nserlum", mongo.Exists(true))
 	///???filter.Add("gato", db.Type("amarelo"))
 	//filter.Add("gato", db.Regex("v.rd+"))
 
@@ -85,20 +79,16 @@ func ExampleFindOne() {
 		Database:   "api-kdl-test",
 		Filter:     filter,
 		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: mongo.FindOptions{
-			Sort: mongo.Sort("etiqueta", false),
-		},
+		Options:    mongo.FindOptions{},
 	}
-	dataResult := mongo.Find(findParams)
+	dataResult := mongo.FindOne(findParams)
 
-	var models []examples.FdibModel
+	model := mongo.FdibModel{}
+	dataResult.Model(&model)
 	dataResult.Print()
-	dataResult.Models(&models)
-
 	//dataResult.toAPI()
-	fmt.Println("dataResult--->>>", models, time.Since(start))
-	//fmt.Println("dataResult--->>>", model, time.Since(start))
-	//fmt.Println("dataResult--->>>", models[1].Etiqueta, time.Since(start))
+	fmt.Println("dataResult--->>>", model, time.Since(start))
+	fmt.Println("dataResult--->>>", model.Etiqueta, time.Since(start))
 
 	// Output:
 	// 1257894000000

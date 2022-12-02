@@ -2,54 +2,69 @@ package mongo_test
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/examples"
 	"github.com/israelagoeiro/api_connect_core/mongo"
+
 	"time"
 )
 
 func ExampleInsertOne() {
 	start := time.Now()
+	dataModel := mongo.FdibModel{
+		IdPeca:     "78945612",
+		ColetaRede: time.Now(),
+		Etiqueta:   "IP08526A",
+		Nserlum:    654321,
+		Status:     true,
+		Tempo: mongo.TempoModel{
+			LigadoParcial:   time.Now(),
+			LigadoDecorrido: time.Now(),
+		},
+	}
 
-	filter := mongo.NewFilter()
-	filter.Add("quantity", mongo.Gte(20))
-
-	//db.inventory.find( { quantity: { $gte: 20 } } )
-	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
-
-	//filter.Id("6384f0e452ed0e02aa02d688")
-	//filter.Add("nserlum", db.Eq(654321))
-	//filter.Add("status", db.Eq(true))
-	//filter.Add("nserlum", db.Gt(500000))
-	//filter.Add("nserlum", db.Gte(500000))
-	//filter.Add("nserlum", db.Lt(500000))
-	//filter.Add("nserlum", db.Lte(500000))
-	//filter.Add("nserlum", db.Ne(123456))
-	//filter.Add("nserlum", db.In([]any{654321}))
-	//filter.Add("nserlum", db.Nin([]any{654321}))
-	//filter.Add("nserlum", db.Exists(true))
-	///???filter.Add("gato", db.Type("amarelo"))
-	//filter.Add("gato", db.Regex("v.rd+"))
+	input := mongo.NewInsertInput()
+	input.Model(dataModel)
+	input.Data("nserlum", 123456)
+	input.DataMap(map[string]any{
+		"casa":      1,
+		"gato":      "verde",
+		"Opa":       1.5,
+		"bola.azul": "circular",
+		"bolax": map[string]any{
+			"azulx": "quadrado",
+		},
+		"list": []any{"A", "B", "C", 1, 2, 3},
+	})
 
 	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
-		Filter:     filter,
-		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: mongo.FindOptions{
-			Sort: mongo.Sort("etiqueta", false),
+		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "bolax", "bola.azul"},
+	}
+
+	insertParams := mongo.InsertParams{
+		Collection: "users",
+		Connection: "123456abc",
+		Database:   "api-kdl-test",
+		Input:      input,
+		FindParams: findParams,
+		DataLog: mongo.DataLog{
+			Action:       "INSERT_NSERLUM",
+			SaveHistory:  true,
+			SaveInfo:     false,
+			SaveAnalytic: false,
 		},
 	}
-	dataResult := mongo.Find(findParams)
+	dataResult := mongo.InsertOne(insertParams)
 
-	var models []examples.FdibModel
+	model := mongo.FdibModel{}
+	dataResult.Model(&model)
 	dataResult.Print()
-	dataResult.Models(&models)
+	//insertResult.toAPI()
 
-	//dataResult.toAPI()
-	fmt.Println("dataResult--->>>", models, time.Since(start))
-	//fmt.Println("dataResult--->>>", model, time.Since(start))
-	//fmt.Println("dataResult--->>>", models[1].Etiqueta, time.Since(start))
+	fmt.Println("id--->>>", dataResult.Id, time.Since(start))
+	fmt.Println("insertResult--->>>", model, time.Since(start))
+	fmt.Println("insertResult--->>>", model.Etiqueta, time.Since(start))
 
 	// Output:
 	// 1257894000000
@@ -58,47 +73,62 @@ func ExampleInsertOne() {
 
 func ExampleInsertMany() {
 	start := time.Now()
+	dataModel := mongo.FdibModel{
+		IdPeca:     "78945612",
+		ColetaRede: time.Now(),
+		Etiqueta:   "IP08526A",
+		Nserlum:    654321,
+		Status:     true,
+		Tempo: mongo.TempoModel{
+			LigadoParcial:   time.Now(),
+			LigadoDecorrido: time.Now(),
+		},
+	}
 
-	filter := mongo.NewFilter()
-	filter.Add("quantity", mongo.Gte(20))
-
-	//db.inventory.find( { quantity: { $gte: 20 } } )
-	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
-
-	//filter.Id("6384f0e452ed0e02aa02d688")
-	//filter.Add("nserlum", db.Eq(654321))
-	//filter.Add("status", db.Eq(true))
-	//filter.Add("nserlum", db.Gt(500000))
-	//filter.Add("nserlum", db.Gte(500000))
-	//filter.Add("nserlum", db.Lt(500000))
-	//filter.Add("nserlum", db.Lte(500000))
-	//filter.Add("nserlum", db.Ne(123456))
-	//filter.Add("nserlum", db.In([]any{654321}))
-	//filter.Add("nserlum", db.Nin([]any{654321}))
-	//filter.Add("nserlum", db.Exists(true))
-	///???filter.Add("gato", db.Type("amarelo"))
-	//filter.Add("gato", db.Regex("v.rd+"))
+	input := mongo.NewInsertInput()
+	input.Model(dataModel)
+	input.Data("nserlum", 123456)
+	input.DataMap(map[string]any{
+		"casa":      1,
+		"gato":      "verde",
+		"Opa":       1.5,
+		"bola.azul": "circular",
+		"bolax": map[string]any{
+			"azulx": "quadrado",
+		},
+		"list": []any{"A", "B", "C", 1, 2, 3},
+	})
 
 	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
-		Filter:     filter,
-		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: mongo.FindOptions{
-			Sort: mongo.Sort("etiqueta", false),
+		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "bolax", "bola.azul"},
+	}
+
+	insertParams := mongo.InsertParams{
+		Collection: "users",
+		Connection: "123456abc",
+		Database:   "api-kdl-test",
+		Input:      input,
+		FindParams: findParams,
+		DataLog: mongo.DataLog{
+			Action:       "INSERT_NSERLUM",
+			SaveHistory:  true,
+			SaveInfo:     false,
+			SaveAnalytic: false,
 		},
 	}
-	dataResult := mongo.Find(findParams)
+	dataResult := mongo.InsertMany(insertParams)
 
-	var models []examples.FdibModel
+	model := mongo.FdibModel{}
+	dataResult.Model(&model)
 	dataResult.Print()
-	dataResult.Models(&models)
+	//insertResult.toAPI()
 
-	//dataResult.toAPI()
-	fmt.Println("dataResult--->>>", models, time.Since(start))
-	//fmt.Println("dataResult--->>>", model, time.Since(start))
-	//fmt.Println("dataResult--->>>", models[1].Etiqueta, time.Since(start))
+	fmt.Println("id--->>>", dataResult.Id, time.Since(start))
+	fmt.Println("insertResult--->>>", model, time.Since(start))
+	fmt.Println("insertResult--->>>", model.Etiqueta, time.Since(start))
 
 	// Output:
 	// 1257894000000

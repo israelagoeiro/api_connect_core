@@ -2,7 +2,6 @@ package mongo_test
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/examples"
 	"github.com/israelagoeiro/api_connect_core/mongo"
 	"time"
 )
@@ -10,46 +9,35 @@ import (
 func ExampleDeleteMany() {
 	start := time.Now()
 
-	filter := mongo.NewFilter()
-	filter.Add("quantity", mongo.Gte(20))
-
-	//db.inventory.find( { quantity: { $gte: 20 } } )
-	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
-
-	//filter.Id("6384f0e452ed0e02aa02d688")
-	//filter.Add("nserlum", db.Eq(654321))
-	//filter.Add("status", db.Eq(true))
-	//filter.Add("nserlum", db.Gt(500000))
-	//filter.Add("nserlum", db.Gte(500000))
-	//filter.Add("nserlum", db.Lt(500000))
-	//filter.Add("nserlum", db.Lte(500000))
-	//filter.Add("nserlum", db.Ne(123456))
-	//filter.Add("nserlum", db.In([]any{654321}))
-	//filter.Add("nserlum", db.Nin([]any{654321}))
-	//filter.Add("nserlum", db.Exists(true))
-	///???filter.Add("gato", db.Type("amarelo"))
-	//filter.Add("gato", db.Regex("v.rd+"))
-
 	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
-		Filter:     filter,
-		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: mongo.FindOptions{
-			Sort: mongo.Sort("etiqueta", false),
+		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "bolax", "bola.azul"},
+	}
+
+	deleteParams := mongo.DeleteParams{
+		Collection: "users",
+		Connection: "123456abc",
+		Database:   "api-kdl-test",
+		FindParams: findParams,
+		DataLog: mongo.DataLog{
+			Action:       "INSERT_NSERLUM",
+			SaveHistory:  true,
+			SaveInfo:     false,
+			SaveAnalytic: false,
 		},
 	}
-	dataResult := mongo.Find(findParams)
+	dataResult := mongo.DeleteMany(deleteParams)
 
-	var models []examples.FdibModel
+	model := mongo.FdibModel{}
+	dataResult.Model(&model)
 	dataResult.Print()
-	dataResult.Models(&models)
+	//insertResult.toAPI()
 
-	//dataResult.toAPI()
-	fmt.Println("dataResult--->>>", models, time.Since(start))
-	//fmt.Println("dataResult--->>>", model, time.Since(start))
-	//fmt.Println("dataResult--->>>", models[1].Etiqueta, time.Since(start))
+	fmt.Println("id--->>>", dataResult.Id, time.Since(start))
+	fmt.Println("insertResult--->>>", model, time.Since(start))
+	fmt.Println("insertResult--->>>", model.Etiqueta, time.Since(start))
 
 	// Output:
 	// 1257894000000
@@ -59,46 +47,35 @@ func ExampleDeleteMany() {
 func ExampleDeleteOne() {
 	start := time.Now()
 
-	filter := mongo.NewFilter()
-	filter.Add("quantity", mongo.Gte(20))
-
-	//db.inventory.find( { quantity: { $gte: 20 } } )
-	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
-
-	//filter.Id("6384f0e452ed0e02aa02d688")
-	//filter.Add("nserlum", db.Eq(654321))
-	//filter.Add("status", db.Eq(true))
-	//filter.Add("nserlum", db.Gt(500000))
-	//filter.Add("nserlum", db.Gte(500000))
-	//filter.Add("nserlum", db.Lt(500000))
-	//filter.Add("nserlum", db.Lte(500000))
-	//filter.Add("nserlum", db.Ne(123456))
-	//filter.Add("nserlum", db.In([]any{654321}))
-	//filter.Add("nserlum", db.Nin([]any{654321}))
-	//filter.Add("nserlum", db.Exists(true))
-	///???filter.Add("gato", db.Type("amarelo"))
-	//filter.Add("gato", db.Regex("v.rd+"))
-
 	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
-		Filter:     filter,
-		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: mongo.FindOptions{
-			Sort: mongo.Sort("etiqueta", false),
+		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "bolax", "bola.azul"},
+	}
+
+	deleteParams := mongo.DeleteParams{
+		Collection: "users",
+		Connection: "123456abc",
+		Database:   "api-kdl-test",
+		FindParams: findParams,
+		DataLog: mongo.DataLog{
+			Action:       "INSERT_NSERLUM",
+			SaveHistory:  true,
+			SaveInfo:     false,
+			SaveAnalytic: false,
 		},
 	}
-	dataResult := mongo.Find(findParams)
+	dataResult := mongo.DeleteOne(deleteParams)
 
-	var models []examples.FdibModel
+	model := mongo.FdibModel{}
+	dataResult.Model(&model)
 	dataResult.Print()
-	dataResult.Models(&models)
+	//insertResult.toAPI()
 
-	//dataResult.toAPI()
-	fmt.Println("dataResult--->>>", models, time.Since(start))
-	//fmt.Println("dataResult--->>>", model, time.Since(start))
-	//fmt.Println("dataResult--->>>", models[1].Etiqueta, time.Since(start))
+	fmt.Println("id--->>>", dataResult.Id, time.Since(start))
+	fmt.Println("insertResult--->>>", model, time.Since(start))
+	fmt.Println("insertResult--->>>", model.Etiqueta, time.Since(start))
 
 	// Output:
 	// 1257894000000

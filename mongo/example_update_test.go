@@ -2,53 +2,60 @@ package mongo_test
 
 import (
 	"fmt"
-	"github.com/israelagoeiro/api_connect_core/examples"
+	"github.com/israelagoeiro/api_connect_core/mongo"
 	"time"
 )
 
 func ExampleUpdateOne() {
 	start := time.Now()
 
-	filter := NewFilter()
-	filter.Add("quantity", Gte(20))
+	filter := mongo.NewFilter()
+	filter.Id("6384f0e452ed0e02aa02d688")
 
-	//db.inventory.find( { quantity: { $gte: 20 } } )
-	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
+	input := mongo.NewUpdateInput()
+	input.Set("nserlum", 999999)
+	input.SetMap(map[string]any{
+		"bola": "azul",
+		"mala": "verde",
+	})
 
-	//filter.Id("6384f0e452ed0e02aa02d688")
-	//filter.Add("nserlum", db.Eq(654321))
-	//filter.Add("status", db.Eq(true))
-	//filter.Add("nserlum", db.Gt(500000))
-	//filter.Add("nserlum", db.Gte(500000))
-	//filter.Add("nserlum", db.Lt(500000))
-	//filter.Add("nserlum", db.Lte(500000))
-	//filter.Add("nserlum", db.Ne(123456))
-	//filter.Add("nserlum", db.In([]any{654321}))
-	//filter.Add("nserlum", db.Nin([]any{654321}))
-	//filter.Add("nserlum", db.Exists(true))
-	///???filter.Add("gato", db.Type("amarelo"))
-	//filter.Add("gato", db.Regex("v.rd+"))
-
-	findParams := FindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
+		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo"},
+	}
+
+	updateParams := mongo.UpdateParams{
+		Collection: "users",
+		Connection: "123456abc",
+		Database:   "api-kdl-test",
+		Info:       nil,
+		Input:      input,
 		Filter:     filter,
-		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: FindOptions{
-			Sort: Sort("etiqueta", false),
+		FindParams: findParams,
+		UpdateOptions: mongo.UpdateOptions{
+			ReturnOriginal: true,
+			Upsert:         true,
+		},
+		DataLog: mongo.DataLog{
+			Action:       "UPDATE_NSERLUM",
+			SaveChange:   true,
+			SaveHistory:  true,
+			SaveInfo:     false,
+			SaveAnalytic: false,
 		},
 	}
-	dataResult := Find(findParams)
+	dataResult := mongo.UpdateOne(updateParams)
 
-	var models []examples.FdibModel
+	model := mongo.FdibModel{}
+	dataResult.Model(&model)
 	dataResult.Print()
-	dataResult.Models(&models)
+	//insertResult.toAPI()
 
-	//dataResult.toAPI()
-	fmt.Println("dataResult--->>>", models, time.Since(start))
-	//fmt.Println("dataResult--->>>", model, time.Since(start))
-	//fmt.Println("dataResult--->>>", models[1].Etiqueta, time.Since(start))
+	fmt.Println("id--->>>", dataResult.Id, time.Since(start))
+	fmt.Println("insertResult--->>>", model, time.Since(start))
+	fmt.Println("insertResult--->>>", model.Etiqueta, time.Since(start))
 
 	// Output:
 	// 1257894000000
@@ -58,46 +65,53 @@ func ExampleUpdateOne() {
 func ExampleUpdateMany() {
 	start := time.Now()
 
-	filter := NewFilter()
-	filter.Add("quantity", Gte(20))
+	filter := mongo.NewFilter()
+	filter.Id("6384f0e452ed0e02aa02d688")
 
-	//db.inventory.find( { quantity: { $gte: 20 } } )
-	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
+	input := mongo.NewUpdateInput()
+	input.Set("nserlum", 999999)
+	input.SetMap(map[string]any{
+		"bola": "azul",
+		"mala": "verde",
+	})
 
-	//filter.Id("6384f0e452ed0e02aa02d688")
-	//filter.Add("nserlum", db.Eq(654321))
-	//filter.Add("status", db.Eq(true))
-	//filter.Add("nserlum", db.Gt(500000))
-	//filter.Add("nserlum", db.Gte(500000))
-	//filter.Add("nserlum", db.Lt(500000))
-	//filter.Add("nserlum", db.Lte(500000))
-	//filter.Add("nserlum", db.Ne(123456))
-	//filter.Add("nserlum", db.In([]any{654321}))
-	//filter.Add("nserlum", db.Nin([]any{654321}))
-	//filter.Add("nserlum", db.Exists(true))
-	///???filter.Add("gato", db.Type("amarelo"))
-	//filter.Add("gato", db.Regex("v.rd+"))
-
-	findParams := FindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
+		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo"},
+	}
+
+	updateParams := mongo.UpdateParams{
+		Collection: "users",
+		Connection: "123456abc",
+		Database:   "api-kdl-test",
+		Info:       nil,
+		Input:      input,
 		Filter:     filter,
-		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: FindOptions{
-			Sort: Sort("etiqueta", false),
+		FindParams: findParams,
+		UpdateOptions: mongo.UpdateOptions{
+			ReturnOriginal: true,
+			Upsert:         true,
+		},
+		DataLog: mongo.DataLog{
+			Action:       "UPDATE_NSERLUM",
+			SaveChange:   true,
+			SaveHistory:  true,
+			SaveInfo:     false,
+			SaveAnalytic: false,
 		},
 	}
-	dataResult := Find(findParams)
+	dataResult := mongo.UpdateMany(updateParams)
 
-	var models []examples.FdibModel
+	model := mongo.FdibModel{}
+	dataResult.Model(&model)
 	dataResult.Print()
-	dataResult.Models(&models)
+	//insertResult.toAPI()
 
-	//dataResult.toAPI()
-	fmt.Println("dataResult--->>>", models, time.Since(start))
-	//fmt.Println("dataResult--->>>", model, time.Since(start))
-	//fmt.Println("dataResult--->>>", models[1].Etiqueta, time.Since(start))
+	fmt.Println("id--->>>", dataResult.Id, time.Since(start))
+	fmt.Println("insertResult--->>>", model, time.Since(start))
+	fmt.Println("insertResult--->>>", model.Etiqueta, time.Since(start))
 
 	// Output:
 	// 1257894000000
@@ -107,46 +121,53 @@ func ExampleUpdateMany() {
 func ExampleFindOneAndUpdate() {
 	start := time.Now()
 
-	filter := NewFilter()
-	filter.Add("quantity", Gte(20))
+	filter := mongo.NewFilter()
+	filter.Id("6384f0e452ed0e02aa02d688")
 
-	//db.inventory.find( { quantity: { $gte: 20 } } )
-	//db.inventory.find(bson.D{bson.E{Key: "quantity", Value: bson.E{Key: "$gte", Value: 20}}})
+	input := mongo.NewUpdateInput()
+	input.Set("nserlum", 999999)
+	input.SetMap(map[string]any{
+		"bola": "azul",
+		"mala": "verde",
+	})
 
-	//filter.Id("6384f0e452ed0e02aa02d688")
-	//filter.Add("nserlum", db.Eq(654321))
-	//filter.Add("status", db.Eq(true))
-	//filter.Add("nserlum", db.Gt(500000))
-	//filter.Add("nserlum", db.Gte(500000))
-	//filter.Add("nserlum", db.Lt(500000))
-	//filter.Add("nserlum", db.Lte(500000))
-	//filter.Add("nserlum", db.Ne(123456))
-	//filter.Add("nserlum", db.In([]any{654321}))
-	//filter.Add("nserlum", db.Nin([]any{654321}))
-	//filter.Add("nserlum", db.Exists(true))
-	///???filter.Add("gato", db.Type("amarelo"))
-	//filter.Add("gato", db.Regex("v.rd+"))
-
-	findParams := FindParams{
+	findParams := mongo.FindParams{
 		Collection: "users",
 		Connection: "123456abc",
 		Database:   "api-kdl-test",
+		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo"},
+	}
+
+	updateParams := mongo.UpdateParams{
+		Collection: "users",
+		Connection: "123456abc",
+		Database:   "api-kdl-test",
+		Info:       nil,
+		Input:      input,
 		Filter:     filter,
-		Fields:     []string{"idPeca", "coletaRede", "etiqueta", "status", "tempo", "gato", "nserlum", "Opa"},
-		Options: FindOptions{
-			Sort: Sort("etiqueta", false),
+		FindParams: findParams,
+		UpdateOptions: mongo.UpdateOptions{
+			ReturnOriginal: true,
+			Upsert:         true,
+		},
+		DataLog: mongo.DataLog{
+			Action:       "UPDATE_NSERLUM",
+			SaveChange:   true,
+			SaveHistory:  true,
+			SaveInfo:     false,
+			SaveAnalytic: false,
 		},
 	}
-	dataResult := Find(findParams)
+	dataResult := mongo.FindOneAndUpdate(updateParams)
 
-	var models []examples.FdibModel
+	model := mongo.FdibModel{}
+	dataResult.Model(&model)
 	dataResult.Print()
-	dataResult.Models(&models)
+	//insertResult.toAPI()
 
-	//dataResult.toAPI()
-	fmt.Println("dataResult--->>>", models, time.Since(start))
-	//fmt.Println("dataResult--->>>", model, time.Since(start))
-	//fmt.Println("dataResult--->>>", models[1].Etiqueta, time.Since(start))
+	fmt.Println("id--->>>", dataResult.Id, time.Since(start))
+	fmt.Println("insertResult--->>>", model, time.Since(start))
+	fmt.Println("insertResult--->>>", model.Etiqueta, time.Since(start))
 
 	// Output:
 	// 1257894000000
