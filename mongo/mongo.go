@@ -1,3 +1,23 @@
+// Copyright 2011 The Go Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package mongo provides functionality for measuring and displaying time.
+//
+// The calendrical calculations always assume a Gregorian calendar, with
+// no leap seconds.
+//
+// Monotonic Clocks
+//
+// Operating systems provide both a “wall clock,” which is subject to
+// changes for clock synchronization, and a “monotonic clock,” which is
+// not. The general rule is that the wall clock is for telling time and
+// the monotonic clock is for measuring time. Rather than split the API,
+// in this package the Time returned by time.Now contains both a wall
+// clock reading and a monotonic clock reading; later time-telling
+// operations use the wall clock reading, but later time-measuring
+// operations, specifically comparisons and subtractions, use the
+// monotonic clock reading.
 package mongo
 
 import (
