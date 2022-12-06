@@ -28,7 +28,7 @@ type FindDocument struct {
 
 func NewFindDocument(param FindParams) FindDocument {
 	apiFields := NewFields(param.Fields)
-	apiDocumentUpdate := FindDocument{
+	updateDocument := FindDocument{
 		Find: func() DataResult {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
@@ -104,5 +104,5 @@ func NewFindDocument(param FindParams) FindDocument {
 			}
 		},
 	}
-	return apiDocumentUpdate
+	return updateDocument
 }

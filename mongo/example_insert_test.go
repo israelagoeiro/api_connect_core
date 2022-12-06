@@ -21,7 +21,7 @@ func ExampleInsertOne() {
 		},
 	}
 
-	input := mongo.NewInsertInput()
+	input := mongo.NewInput()
 	input.Model(dataModel)
 	input.Data("nserlum", 123456)
 	input.DataMap(map[string]any{
@@ -85,7 +85,7 @@ func ExampleInsertMany() {
 		},
 	}
 
-	input := mongo.NewInsertInput()
+	input := mongo.NewInput()
 	input.Model(dataModel)
 	input.Data("nserlum", 123456)
 	input.DataMap(map[string]any{

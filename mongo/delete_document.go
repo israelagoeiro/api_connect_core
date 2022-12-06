@@ -21,7 +21,7 @@ type DeleteDocument struct {
 }
 
 func NewDeleteDocument(param DeleteParams) DeleteDocument {
-	apiDocumentDelete := DeleteDocument{
+	deleteDocument := DeleteDocument{
 		DeleteMany: func() DataResult {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
@@ -55,5 +55,5 @@ func NewDeleteDocument(param DeleteParams) DeleteDocument {
 			}
 		},
 	}
-	return apiDocumentDelete
+	return deleteDocument
 }

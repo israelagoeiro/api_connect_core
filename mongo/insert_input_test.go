@@ -2,6 +2,7 @@ package mongo_test
 
 import (
 	"fmt"
+	"github.com/israelagoeiro/api_connect_core/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"testing"
 )
@@ -17,45 +18,46 @@ func IsValidData(a, b bson.D) bool {
 }
 
 func TestData(t *testing.T) {
-	var input = NewInsertInput()
+	var input = mongo.NewInput()
 	input.Data("qty", 20)
 
-	got := input.Values()
-	want := bson.D{bson.E{Key: "qty", Value: 20}}
-	fmt.Println("got", got)
-	fmt.Println("want", want)
+	expected := input.Values()
+	obtained := bson.D{bson.E{Key: "qty", Value: 20}}
+	fmt.Println("expected", expected)
+	fmt.Println("obtained", obtained)
 
-	if !IsValidData(got, want) {
-		t.Errorf("got %q, wanted %q", got, want)
+	if !IsValidData(expected, obtained) {
+		t.Errorf("expected %q, obtained %q", expected, obtained)
 	}
 }
 
 func TestInsertDataMap(t *testing.T) {
-	var input = NewInsertInput()
+	var input = mongo.NewInput()
 	input.DataMap(map[string]any{
 		"qty":   20,
 		"total": 100,
 		"color": "red",
 	})
 
-	got := input.Values()
-	want := bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}, bson.E{Key: "color", Value: "red"}}
-	fmt.Println("got", got)
-	fmt.Println("want", want)
+	expected := input.Values()
+	obtained := bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}, bson.E{Key: "color", Value: "red"}}
+	fmt.Println("expected", expected)
+	fmt.Println("obtained", obtained)
 
-	if !IsValidData(got, want) {
-		t.Errorf("got %q, wanted %q", got, want)
+	if !IsValidData(expected, obtained) {
+		t.Errorf("expected %q, obtained %q", expected, obtained)
 	}
 }
 
 func TestInsertIsValid(t *testing.T) {
-	var input = NewInsertInput()
+	var input = mongo.NewInput()
 	input.Data("qty", 20)
-	got := input.IsValid()
-	fmt.Println("got", got)
-	fmt.Println("want", true)
 
-	if got != true {
-		t.Errorf("got %t, wanted %t", got, true)
+	obtained := input.IsValid()
+	fmt.Println("expected", true)
+	fmt.Println("obtained", obtained)
+
+	if obtained != true {
+		t.Errorf("obtained %t, expected %t", obtained, true)
 	}
 }

@@ -49,7 +49,7 @@ func NewUpdateDocument(param UpdateParams) UpdateDocument {
 			SetReturnDocument(options.ReturnDocument(returnOriginal))
 	}
 
-	apiDocumentUpdate := UpdateDocument{
+	updateDocument := UpdateDocument{
 		FindOneAndUpdate: func() DataResult {
 			return DataResult{}
 		},
@@ -104,5 +104,5 @@ func NewUpdateDocument(param UpdateParams) UpdateDocument {
 		},
 	}
 
-	return apiDocumentUpdate
+	return updateDocument
 }

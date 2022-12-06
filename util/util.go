@@ -7,9 +7,9 @@ import (
 	"reflect"
 )
 
-func LoadEnv() {
+func LoadEnv(filename string) {
 	// load .env file
-	err := godotenv.Load("config.env")
+	err := godotenv.Load(filename)
 
 	if err != nil {
 		log.Fatalf("Error loading .env file")
@@ -43,4 +43,15 @@ func ContainsStr(s []string, e string) bool {
 		}
 	}
 	return false
+}
+
+func ToMap(values interface{}) map[string]any {
+	result := map[string]any{}
+	fmt.Println(values)
+	/*for i := 0; i < reflect.ValueOf(values).Len(); i++ {
+		field := fmt.Sprintf("%v", reflect.ValueOf(values).Index(i).Field(0))
+		value := fmt.Sprintf("%v", reflect.ValueOf(values).Index(i).Field(1))
+		result[field] = value
+	}*/
+	return result
 }

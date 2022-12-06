@@ -26,7 +26,7 @@ func NewDocumentInsert(param InsertParams) DocumentInsert {
 	//apiFields := NewFields(param)
 	mongoDataLog := NewMongoDataLog(param.DataLog)
 
-	apiDocumentUpdate := DocumentInsert{
+	updateDocument := DocumentInsert{
 		InsertMany: func() DataResult {
 			mongoDataLog.PrepareInsert(param.Input)
 
@@ -84,5 +84,5 @@ func NewDocumentInsert(param InsertParams) DocumentInsert {
 		},
 	}
 
-	return apiDocumentUpdate
+	return updateDocument
 }

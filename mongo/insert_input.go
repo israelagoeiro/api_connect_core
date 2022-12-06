@@ -61,7 +61,7 @@ func NewInsertInput() InsertInput {
 			if len(_listData) > 0 {
 				for k, v := range _listData {
 					if util.ContainsStr(keys, k) {
-						fmt.Println("InsertParams::Input", result, "Error:", "{", k, ":", v, "}")
+						fmt.Println("InsertParams::InsertInput", result, "Error:", "{", k, ":", v, "}")
 						panic("Error InsertParams: Foi encontrado uma duplicidade de parâmetros em '" + k + "'.")
 					}
 					result = append(result, bson.E{Key: k, Value: v})

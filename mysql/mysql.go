@@ -18,60 +18,48 @@
 // operations use the wall clock reading, but later time-measuring
 // operations, specifically comparisons and subtractions, use the
 // monotonic clock reading.
-package mongo
+package mysql
 
 import (
-	"context"
+	"database/sql"
 	"fmt"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/israelagoeiro/api_connect_core/util"
 	"os"
-	"time"
+	"strconv"
 )
 
-var Client *mongo.Client
+var Client *sql.DB
 
-func NewClient() {
+func NewClient(filename string) {
+	util.LoadEnv(filename)
 	Client = newClient()
 }
 
-func newClient() *mongo.Client {
-	client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_DB_CONNECT")))
+func newClient() *sql.DB {
+	hostname := os.Getenv("MYSQL_DB_HOSTNAME")
+	port := os.Getenv("MYSQL_DB_PORT")
+	username := os.Getenv("MYSQL_DB_USERNAME")
+	password := os.Getenv("MYSQL_DB_PASSWORD")
+	schema := os.Getenv("MYSQL_DB_SCHEMA")
+	maxIdleConns, _ := strconv.Atoi(os.Getenv("MAX_IDLE_CONNS"))
+
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", username, password, hostname, port, schema)
+	client, err := sql.Open("mysql", dataSourceName)
+	client.SetMaxIdleConns(maxIdleConns)
 
 	if err != nil {
-		fmt.Println("Error NewClient:MongoDb", err.Error())
+		fmt.Println("Error NewClient:Mysql", err.Error())
 	}
 
-	ctx, _ := context.WithTimeout(context.Background(), 90*time.Second)
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	errPing := client.Ping(ctx, nil)
-	if errPing != nil {
-		log.Fatal(errPing)
-	}
-
-	fmt.Println("NewClient: Connected to MongoDB")
+	fmt.Println("NewClient: Connected to Mysql")
 	return client
 }
 
 func Disconnect() {
-	if Client == nil {
-		return
-	}
-
-	err := Client.Disconnect(context.TODO())
+	fmt.Println("Connection to MYSQL closed.")
+	err := Client.Close()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error TestInsertOne:Client.Close", err.Error())
 	}
-
-	// TODO optional you can log your closed MongoDB client
-	fmt.Println("Connection to MongoDB closed.")
-}
-
-func GetCollection(database string, collectionName string) *mongo.Collection {
-	return Client.Database(database).Collection(collectionName)
 }

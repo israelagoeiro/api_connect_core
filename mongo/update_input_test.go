@@ -136,13 +136,13 @@ func TestAddToSet(t *testing.T) {
 	input.AddToSet("total", 100)
 	input.AddToSet("casa", "azul")
 
-	got := input.Values()
-	want := bson.D{bson.E{Key: "$addToSet", Value: bson.D{bson.E{Key: "qty", Value: 21}, bson.E{Key: "casa", Value: "azul"}, bson.E{Key: "total", Value: 100}}}}
-	fmt.Println("got", got)
-	fmt.Println("want", want)
+	expected := input.Values()
+	obtained := bson.D{bson.E{Key: "$addToSet", Value: bson.D{bson.E{Key: "qty", Value: 21}, bson.E{Key: "casa", Value: "azul"}, bson.E{Key: "total", Value: 100}}}}
+	fmt.Println("expected", expected)
+	fmt.Println("obtained", obtained)
 
-	if !IsValidAddToSet(got, want) {
-		t.Errorf("got %q, wanted %q", got, want)
+	if !IsValidAddToSet(expected, obtained) {
+		t.Errorf("expected %q, obtained %q", expected, obtained)
 	}
 }
 
@@ -153,13 +153,13 @@ func TestAddToSetMap(t *testing.T) {
 		"total": 100,
 	})
 
-	got := input.Values()
-	want := bson.D{bson.E{Key: "$addToSet", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
-	fmt.Println("got", got)
-	fmt.Println("want", want)
+	expected := input.Values()
+	obtained := bson.D{bson.E{Key: "$addToSet", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
+	fmt.Println("expected", expected)
+	fmt.Println("obtained", obtained)
 
-	if !IsValidAddToSet(got, want) {
-		t.Errorf("got %q, wanted %q", got, want)
+	if !IsValidAddToSet(expected, obtained) {
+		t.Errorf("expected %q, obtained %q", expected, obtained)
 	}
 }
 
@@ -168,13 +168,13 @@ func TestInc(t *testing.T) {
 	input.Inc("total", 100)
 	input.Inc("qty", 20)
 
-	got := input.Values()
-	want := bson.D{bson.E{Key: "$inc", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
-	fmt.Println("got", got)
-	fmt.Println("want", want)
+	expected := input.Values()
+	obtained := bson.D{bson.E{Key: "$inc", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
+	fmt.Println("expected", expected)
+	fmt.Println("obtained", obtained)
 
-	if !IsValidInc(got, want) {
-		t.Errorf("got %q, wanted %q", got, want)
+	if !IsValidInc(expected, obtained) {
+		t.Errorf("expected %q, obtained %q", expected, obtained)
 	}
 }
 
@@ -185,13 +185,13 @@ func TestIncMap(t *testing.T) {
 		"total": 100,
 	})
 
-	got := input.Values()
-	want := bson.D{bson.E{Key: "$inc", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
-	fmt.Println("got", got)
-	fmt.Println("want", want)
+	expected := input.Values()
+	obtained := bson.D{bson.E{Key: "$inc", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
+	fmt.Println("expected", expected)
+	fmt.Println("obtained", obtained)
 
-	if !IsValidInc(got, want) {
-		t.Errorf("got %q, wanted %q", got, want)
+	if !IsValidInc(expected, obtained) {
+		t.Errorf("expected %q, obtained %q", expected, obtained)
 	}
 }
 
@@ -200,13 +200,13 @@ func TestSet(t *testing.T) {
 	input.Set("total", 100)
 	input.Set("qty", 20)
 
-	got := input.Values()
-	want := bson.D{bson.E{Key: "$set", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
-	fmt.Println("got", got)
-	fmt.Println("want", want)
+	expected := input.Values()
+	obtained := bson.D{bson.E{Key: "$set", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
+	fmt.Println("expected", expected)
+	fmt.Println("obtained", obtained)
 
-	if !IsValidSet(got, want) {
-		t.Errorf("got %q, wanted %q", got, want)
+	if !IsValidSet(expected, obtained) {
+		t.Errorf("expected %q, obtained %q", expected, obtained)
 	}
 }
 
@@ -217,13 +217,13 @@ func TestSetMap(t *testing.T) {
 		"total": 100,
 	})
 
-	got := input.Values()
-	want := bson.D{bson.E{Key: "$set", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
-	fmt.Println("got", got)
-	fmt.Println("want", want)
+	expected := input.Values()
+	obtained := bson.D{bson.E{Key: "$set", Value: bson.D{bson.E{Key: "qty", Value: 20}, bson.E{Key: "total", Value: 100}}}}
+	fmt.Println("expected", expected)
+	fmt.Println("obtained", obtained)
 
-	if !IsValidSet(got, want) {
-		t.Errorf("got %q, wanted %q", got, want)
+	if !IsValidSet(expected, obtained) {
+		t.Errorf("expected %q, obtained %q", expected, obtained)
 	}
 }
 
@@ -231,11 +231,11 @@ func TestUpdateIsValid(t *testing.T) {
 	var input = NewUpdateInput()
 	input.AddToSet("qty", 20)
 
-	got := input.IsValid()
-	fmt.Println("got", got)
-	fmt.Println("want", true)
+	expected := input.IsValid()
+	fmt.Println("expected", expected)
+	fmt.Println("obtained", true)
 
 	if got != true {
-		t.Errorf("got %t, wanted %t", got, true)
+		t.Errorf("expected %t, obtained %t", expected, true)
 	}
 }
